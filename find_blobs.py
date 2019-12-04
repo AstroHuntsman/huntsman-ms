@@ -33,8 +33,7 @@ class imframe():
         self.index = np.arange(self.diff.size)
         self.index.resize(self.shape)
 
-    # computes faster blob_chi2 by indentifying pixels in a square around the i-th pixel
-    def blob_chi2_fast(self, i, radius=5.0):
+    def blob_chi2(self, i, radius=5.0):
         x = self.x[0][i]
         y = self.x[1][i]
         xmin = np.int32(np.max([(x - radius), 0]))
@@ -52,25 +51,6 @@ class imframe():
         # Ideally radius=n*scale where n>3
         reduced_chi_squared = np.mean(np.square(self.diff[i] *
                                                 stats.norm.pdf(r,
-                                                               loc=0.0,
-                                                               scale=1.0) - self.diff[ind]) /
-                                      (self.sigma**2 + self.original[ind]))
-
-        return(reduced_chi_squared)
-
-    def blob_chi2(self, i, radius=5.0):
-        r = np.sqrt(np.square(self.x[0] - self.x[0][i]) + np.square(self.x[1] - self.x[1][i]))
-        # Pick some arbitrary (for now) radius of points to test
-        ind = np.where(r < radius)[0]
-        self.flag[ind] = 1
-
-        print("Indices in this test:\n{}".format(ind))
-        print("Values at the indices:\n{}".format(self.diff[ind]))
-
-        # TODO: Check this expression is correct
-
-        reduced_chi_squared = np.mean(np.square(self.diff[i] *
-                                                stats.norm.pdf(r[ind],
                                                                loc=0.0,
                                                                scale=1.0) - self.diff[ind]) /
                                       (self.sigma**2 + self.original[ind]))
