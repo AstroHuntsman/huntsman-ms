@@ -64,7 +64,7 @@ class imframe():
     def blob_chi2(self, i, radius=5.0):
         r = np.sqrt(np.square(self.x[0] - self.x[0][i]) + np.square(self.x[1] - self.x[1][i]))
         # Pick some arbitrary (for now) radius of points to test
-        ind = np.where(r < 5)[0]
+        ind = np.where(r < radius)[0]
         self.flag[ind] = 1
 
         print("Indices in this test:\n{}".format(ind))
@@ -214,4 +214,4 @@ def main_from_arrays(raw1, raw2):
 
 
 if __name__ == "__main__":
-    # main_from_files()
+    main_from_files()
