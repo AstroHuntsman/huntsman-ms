@@ -165,15 +165,16 @@ def main_from_stream():
     from generate_images import ImageStream
 
 
-def main_from_arrays(raw1, raw2):
-    diff = compare_data(raw1, raw2)
+def main_from_arrays(previous_frame, current_frame, stdev=5.5105, thresh=1000):
+    """Summary
 
-    # Define our threshold. The noise is artificially generated, so we can hard code the stddev
-    stdev = 5.5105
-    # thresh = 6*stdev
-    # Set an arbitrary, but high, threshold for now. This is guaranteed to only accept pixels belonging
-    # to the injected flash
-    thresh = 1000
+    Args:
+        raw1 (TYPE): Description
+        raw2 (TYPE): Description
+        stdev (float, optional): Define our threshold. The noise is artificially generated, so we can hard code the stddev
+        thresh (int, optional): Set an arbitrary, but high, threshold for now. This is guaranteed to only accept pixels belonging to the injected flash
+    """
+    diff = compare_data(previous_frame, current_frame)
 
     print("Threshold = {}".format(thresh))
     data = np.resize(diff, diff.size)
@@ -182,7 +183,7 @@ def main_from_arrays(raw1, raw2):
     # Now calculate the likelihood of each blob being real
     # imframe needs the original data, as well as the differenced one. It also needs the standard
     # deviation
-    im = imframe(diff, raw1, stdev)
+    im = imframe(diff, previous_frame, stdev)
     im.findall(bright_indices[0])
     print(im.lpeaks)
 
